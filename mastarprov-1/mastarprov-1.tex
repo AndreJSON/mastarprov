@@ -1,0 +1,37 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper]{geometry}
+\usepackage[swedish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+
+\title{Mästarprov 1}
+\author{André Josefsson}
+
+\begin{document}
+
+\maketitle
+
+\section{Hantverkare}
+
+Algoriritmen använder använder sig av en vektor innehållandes tiderna för de $n$ st olika hantverkarna. Den väljer sedan helt enkelt det minsta elementet vid varje iteration i while loopen. Elementet lyfts ur vektorn och och kostnaden ökar med elementets värde gånger antalet hantverkare (eftersom de andra hantverkarna måste vänta under tiden).
+
+\begin{algorithm}
+\begin{algorithmic}[0]
+\State $cost \gets$ 0, $times \gets [t_1,...,t_n]$
+\While{$times$ is not empty}
+\State  \textbf{extract} lowest value from $times$  \textbf{as} $t$
+\State $cost = t * |times|$
+\EndWhile
+\State  \textbf{return} $i$
+\end{algorithmic}
+\end{algorithm}
+
+Algoritmens korrekthet bevisas med följande resonemang:\\
+Antag algoritmen stämmer för något antal hantverkare $k$. Det är enkelt att se att detta åtminstone håller för $k = 1$.
+
+\section{Höravstånd}
+
+\end{document}
