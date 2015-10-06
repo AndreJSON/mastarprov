@@ -20,18 +20,25 @@ Algoriritmen använder använder sig av en vektor $times$ innehållandes tiderna $t
 \begin{algorithm}
 \begin{algorithmic}[0]
 \State Hantverkarkostnad(times[1..n]) =
+\State \textbf{Sortera times med mergesort}
 \State $cost \gets$ 0
 \While{$times$ is not empty}
+\State \textbf{invariant}
 \State  $t \gets$ lowest value from $times$
-\State $cost = cost + t * |times|$
+\State $cost = cost + t * |times| * 100$
 \State \textbf{remove} $t$ from $times$
 \EndWhile
 \State  \textbf{return} $cost$
 \end{algorithmic}
 \end{algorithm}
 
+Loop invarianten är: $cost$ motsvarar den minimala kostnaden för att utföra de borttagna arbetena med n stycken hantverkare från början.\\\\
+
 Algoritmens korrekthet bevisas med följande resonemang:\\
-Med 0 eller 1 st hantverkare är lösningen trivial. Antag nu att $k$ är den minsta kostnaden för att utföra $m \geq 2$ st hantverkararbeten. Lösningen innehåller $m$ st arbeten utförda i ordningen $a_1,...,a_m$. Om $k$ skulle åstadkommits genom att välja hantverkarna i en annan ordning än icke-avtagande borde det finnas två hantverkararbeten $a_i$ och $a_j$ sådana att $t_i > t_j$ och $1 \leq i < j \leq m$. Kostnaden för de två arbetena är $t_i * (m+1-i)$ och $t_j * (m+1-j)$. Genom att byta plats på $a_i$ och $a_j$ förblir kostnaden för alla andra arbeten oförändrade, medan de två arbetena nu får kostnaden $t_i * (m+1-j)$ och $t_j * (m+1-i)$. Men eftersom $t_i > t_j$ och $(m+1-i) > (m+1-j)$ måste vi nu fått en strikt mindre kostnad (Kort bevis för varför det är så finns i avsnitt 3).
+Med 0 eller 1 st hantverkare är lösningen trivial. Antag nu att $k$ är den minsta kostnaden för att utföra $m \geq 2$ st hantverkararbeten. Lösningen innehåller $m$ st arbeten utförda i ordningen $a_1,...,a_m$. Om $k$ skulle åstadkommits genom att välja hantverkarna i en annan ordning än icke-avtagande borde det finnas två hantverkararbeten $a_i$ och $a_j$ sådana att $t_i > t_j$ och $1 \leq i < j \leq m$. Kostnaden för de två arbetena är $t_i * (m+1-i)$ och $t_j * (m+1-j)$. Genom att byta plats på $a_i$ och $a_j$ förblir kostnaden för alla andra arbeten oförändrade, medan de två arbetena nu får kostnaden $t_i * (m+1-j)$ och $t_j * (m+1-i)$. Men eftersom $t_i > t_j$ och $(m+1-i) > (m+1-j)$ måste vi nu fått en strikt mindre kostnad (Kort bevis för varför det är så finns i avsnitt 3). $k$ måste alltså åstadklommits genom att välja hantverkarna i en icke-avtagande ordning. Då detta är precis vad den beskrivna algoritmen gör är korrekthet i ordningen alltså visad.\\
+När ordningen är korrekt behöver algoritmen endast addera rätt mängd till kostnaden varje loopvarv för att vara korrekt. Rätt kostnad för varje arbete är tiden för arbetet multiplicerat med antalet hantverkare som ska få betalt under tiden, alltså alla som väntar plus den som arbetar. Loop invarianten visar att detta håller.\\
+
+Tidskomplexiteten är $\mathcal{O}(nlog(n))$
 
 \section{Höravstånd}
 
