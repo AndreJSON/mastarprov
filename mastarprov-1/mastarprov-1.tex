@@ -52,7 +52,7 @@ Problemet löses enklast genom att successivt dela upp listorna tills dess att al
 \begin{algorithmic}[0]
 \State //Position är en funktion som berättar vilken position bokstaven har i alfabetet.
 \State //T.ex Position(`a`) = 1, Position(`c`) = 3.
-\State //Låt initialt: $letter \gets$ `a`\\
+\State //Låt: $letter \gets$ `a` vid det initiala anropet.\\
 \State Anagrammängd($wordList$[1..$m$], $letter$)=
 \State \textbf{assert 1}
 \For{$i \gets 1$ \textbf{to} Position(`ö`)+1}
@@ -87,19 +87,23 @@ Asserts:
 \item Alla icke-tomma listor i $newLists$ fram t.o.m. $list$ har använts i precis ett rekursivt anrop med en bokstavs-parameter som är ett steg närmare ö än $letter$.
 \end{enumerate}
 
-Tidskomplexiteten är $\mathcal{O}(nm)$\\
-Detta kan ses genom att dela upp algoritmen i ett antal steg och studera var och ett av dem:
-\begin{enumerate}
-\item Den första for-slingan kör precis 30 gånger och gör ett arbete som tar konstant tid. Totalt sett tar denna del alltså konstant tid.
-\item 
-\end{enumerate}
-blabla nånting om under och övre gräns optimal lösning.
-
 Algoritmens korrekthet bevisas med hjälp av asserts och följande resonemang:\\
 \textbf{assert 1} stämmer uppenbart första gången då $letter$ då är `a` det inte finns några bokstäver före `a`.\\
 \textbf{assert 2} stämmer uppenbart efter varje iteration då de två raderna i slingan väldigt tydligt säger samma sak som \textbf{assert 2}. Efter samtliga iterationer i slingan har alltså samtliga ord i $wordList$ placerats i rätt lista i $newLists$. Nu säger alltså \textbf{assert 2}, givet att \textbf{assert 1} stämde från början, att alla listor i $newLists$ endast innehåller ord som är anagram om man bortser från alla bokstäver efter $letter$.\\
 Om $letter \neq$ `ö` vid If-satsen hoppar algoritmen till For-slingan som utför rekursionen. Eftersom ingen variabelmodifierande kod har exekverats sedan \textbf{assert 2} kan det enkelt ses att \textbf{assert 4} stämmer efter varje iteration. Efter alla iterationer i slingan har alltså alla icke-tomma listor använts i rekursiva anrop, så inga ord har förlorats. Vidare har den medskickade bokstaven kommit ett steg närmare ö, vilket innebär att algoritmen med nödvändighet närmat sig terminering. Om \textbf{assert 2} gällde så säger denna tillsammans med \textbf{assert 4} att \textbf{assert 1} med nödvändighet måste gälla inuti varje ny rekursion.\\
 Om istället $letter =$ `ö` vid If-satsen hoppar algoritmen till For-slingan som skriver ut. Slingan utför uppenbart det \textbf{assert 3} påstår. Eftersom nu $letter =$ `ö` har vi från \textbf{assert 2} fått att alla listor i $newLists$ endast innehåller anagram. Vidare har \textbf{assert 4}, som måste gällt vid föregående rekursioner har, sett till att inga ord går förlorade och att alla ord används i rekursioner som hela tiden närmar sig $letter =$ `ö`. Allt detta betyder alltså att alla ord med nödvändighet tar sig till print-raden och att ordet alltid gör så i en lista som innehåller alla ordets anagram.
+
+Tidskomplexiteten är $\mathcal{O}(mn)$\\
+Detta kan ses genom att dela upp algoritmen i de olika for-slingorna och studera var och en av dem:
+\begin{enumerate}
+\item Den första for-slingan kör precis 30 varv och gör ett arbete som tar konstant tid. Totalt sett tar denna del alltså konstant tid. Slingan kommer köras varje gång anagrammängd anropas, vilket maximalt kan ske $29*m$ gånger i värsta fall. Värsta fallet inträffar då orden vid varje rekursion delar upp sig så mycket som möjligt och därmed maximerar antalet rekursioner. Totalt sett tar alltså denna del $\mathcal{O}(m)$ tid.
+\item Den andra for-slingan kommer köras totalt $29*m$ varv oavsett hur orden delar upp sig. Detta eftersom varje ord kommer processas precis en gång för varje bokstav i alfabetet. Se korrekthetsbeviset för djupare analys om varför. Varje varv måste frekvensen av en viss bokstav beräknas i ordet, vilket tar tid proportionellt mot $n$. Append kan görasi konstant tid. Totalt sett tar alltså denna del $\mathcal{O}(mn)$ tid.
+\item Den tredje for-slingan kommer köras $m$ varv i värsta fallet. Värsta fallet inträffar om inga ord i ordlistan är anagram med något annat ord. Speciellt gäller att alla ord behandlas precis en gång av slingan, utspritt över maximalt $m$ varv. Radixsorten tar $n$ tid för varje ord, print även den $n$ tid per ord. Totalt tar alltså denna del $\mathcal{O}(mn)$ tid.
+\item Den fjärde och sista for-slingan kör högst $m$ varv och tar konstant tid varje gång om man bortser från rekursionen. Eftersom resonemanget redan tar hänsyn till alla gånger som varje slinga kan exekveras över samtliga rekursioner kan vi här alltså bortse från tiden för rekursionerna. Totalt sett tar alltså denna del $\mathcal{O}(m)$ tid.
+\end{enumerate}
+Hela algoritmen tycks alltså ta $\mathcal{O}(m)$ + $\mathcal{O}(mn)$ + $\mathcal{O}(mn)$ + $\mathcal{O}(m)$ tid, vilket blir just $\mathcal{O}(m)$.
+
+Tidskomplexiteten sammanfaller med den undre gränsen. Detta ty den undre gränsen inte kan vara lägre än $\mathcal{O}(mn)$. Om gränsen skulle vara lägre än så skulle det innebära att en sådan algoritm inte skulle titta på alla bokstäver i alla orden. Om algoritmen inte tittar på alla bokstäver kan man byta ut den bokstaven utan att algoritmen ger ett annat svar. Det leder uppenbarligen till ett inkorrekt beteende.\\
 
 
 \newpage
