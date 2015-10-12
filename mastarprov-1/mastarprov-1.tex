@@ -50,33 +50,47 @@ Problemet löses enklast genom att successivt dela upp listorna tills dess att al
 
 \begin{algorithm}
 \begin{algorithmic}[0]
-\State //$n$ är längden på längsta ordet i den ursprungliga listan.
 \State //Position är en funktion som berättar vilken position bokstaven har i alfabetet.
 \State //T.ex Position(`a`) = 1, Position(`c`) = 3.
 \State //Låt initialt: $letter \gets$ `a`\\
 \State Anagrammängd($wordList$[1..$m$], $letter$)=
+\State \textbf{assert}
 \For{$i \gets 1$ \textbf{to} Position(`ö`)+1}
 \State $newLists[i] \gets$ empty list
 \EndFor
 \For{every $word$ in $wordList$}
 \State $count \gets$ \textbf{occurences of} $letter$
 \State \textbf{append} $word$ \textbf{to} $newLists[count+1]$
+\State \textbf{assert}
 \EndFor
 \If{$letter$ = `ö`}
 \For{every $list$ in $newLists$}
 \State \textbf{sort} list in alphabetical order using \textbf{radixsort}
+\State \textbf{assert}
 \State \textbf{print} $list$
 \State \textbf{print newline}
+\State \textbf{assert}
 \EndFor
 \Else
 \For{every $list$ in $newLists$}
 \State Anagrammängd($list$, \textbf{letter after} $letter$)
+\State \textbf{assert}
 \EndFor
 \EndIf
 \end{algorithmic}
 \end{algorithm}
 
+Asserts:
+\begin{enumerate}
+\item $wordList$ innehåller bara ord med samma antal av samtliga bokstäver till med icke med $letter$
+\item Alla ord i $wordList$ fram t.o.m. $word$ förekommer precis en gång i $newLists$ och då endast i $newLists[x+1]$ där x är antalet förekomster av $letter$.
+\item Alla listor i $newLists$ fram t.o.m. $list$ har sorterats i bokstavsordning och därefter skrivits ut på varsin rad.
+\item Alla listor i $newLists$ fram t.o.m. $list$ har använts i rekursiva anrop med en bokstav som är närmare ett steg närmare ö än $letter$.
+\end{enumerate}
+
 Tidskomplexiteten är $\mathcal{O}(nm)$\\
+
+
 
 \newpage
 \section{Tillägg}
