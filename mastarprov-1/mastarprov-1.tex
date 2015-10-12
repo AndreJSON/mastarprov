@@ -18,16 +18,16 @@ Algoriritmen använder använder sig av en vektor $times$ innehållandes tiderna $t
 
 \begin{algorithm}
 \begin{algorithmic}[0]
-\State Hantverkarkostnad(times[1..n]) =
+\State Hantverkarkostnad($times$[1..$n$]) =
 \State \textbf{Sortera times med mergesort}
 \State $cost \gets$ 0
 \While{$times$ is not empty}
 \State \textbf{invariant}
 \State  $t \gets$ lowest value from $times$
-\State $cost = cost + t * |times| * 100$
+\State $cost \gets cost + t * |times| * 100$
 \State \textbf{remove} $t$ from $times$
 \EndWhile
-\State  \textbf{return} $cost$
+\State \textbf{return} $cost$
 \end{algorithmic}
 \end{algorithm}
 
@@ -40,6 +40,36 @@ Det finns två delar av algoritmen som tar mer än konstant tid, mergesort och whi
 Algoritmens korrekthet bevisas med följande resonemang:\\
 Med 0 eller 1 st hantverkare är lösningen trivial. Antag nu att $k$ är den minsta kostnaden för att utföra $m \geq 2$ st hantverkararbeten. Lösningen innehåller $m$ st arbeten utförda i ordningen $a_1,...,a_m$. Om $k$ skulle åstadkommits genom att välja hantverkarna i en annan ordning än icke-avtagande borde det finnas två hantverkararbeten $a_i$ och $a_j$ sådana att $t_i > t_j$ och $1 \leq i < j \leq m$. Kostnaden för de två arbetena är $t_i * (m+1-i)$ och $t_j * (m+1-j)$. Genom att byta plats på $a_i$ och $a_j$ förblir kostnaden för alla andra arbeten oförändrade, medan de två arbetena nu får kostnaden $t_i * (m+1-j)$ och $t_j * (m+1-i)$. Men eftersom $t_i > t_j$ och $(m+1-i) > (m+1-j)$ måste vi nu fått en strikt mindre kostnad (Kort bevis för varför det är så finns i avsnitt 3). $k$ måste alltså åstadklommits genom att välja hantverkarna i en icke-avtagande ordning. Då detta är precis vad den beskrivna algoritmen gör är korrekthet i ordningen alltså visad.\\
 När ordningen är korrekt behöver algoritmen endast addera rätt mängd till kostnaden varje loopvarv för att vara korrekt. Rätt kostnad för varje arbete är tiden för arbetet multiplicerat med antalet hantverkare som ska få betalt under tiden, alltså alla som väntar plus den som arbetar. Loop invarianten visar att detta håller.
+
+
+\section{Mängder av anagram!}
+
+\begin{algorithm}
+\begin{algorithmic}[0]
+\State //$n$ är längden på längsta ordet i den ursprungliga listan.
+\State //$wordList[w].copy$ innehåller en kopia av ordet där inga platser bytts mot \textbf{no char}.
+\State //Denna kopia följer alltid med ordet.\\
+\State Anagrammängd($wordList$[1..$m$])=
+\For{every letter ö \textbf{to} a \textbf{as} $letter$}
+\State $newList \gets$ empty list
+\For{$position \gets 1$ \textbf{to} $n$}
+\For{every word in $wordList$ in rising order \textbf{as} $w$}
+\If{$list[w][p] = letter$}
+\State $list[w][p] \gets$ \textbf{no char}
+\State \textbf{append} $list[w]$ \textbf{to} $newList$
+\State \textbf{remove} $list[w]$
+\EndIf
+\EndFor
+\EndFor
+\State Anagrammängd(newList)
+\EndFor
+\For{every element in $wordList$ \textbf{as} $e$}
+\State \textbf{print} $e.copy$
+\EndFor
+\State \textbf{print} a newline if any elements were printed.
+\end{algorithmic}
+\end{algorithm}
+
 
 \section{Tillägg}
 För två par av positiva tal $a$ och $b$, samt $x$ och $y$, gäller att $ax+by > ay+bx$ om $a>b$ samt $x>y$.\\
