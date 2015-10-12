@@ -14,7 +14,7 @@
 \maketitle
 
 \section{Hantverkare}
-Algoriritmen använder använder sig av en vektor $times$ innehållandes tiderna $t_1,...,t_n$ för de olika hantverkarna. Den väljer sedan det minsta elementet ur vektorn vid varje iteration i while-slingan. Den totala kostnaden ökar med elementets värde $*$ gånger antalet hantverkare som är kvar i vektorn (eftersom det precis motsvarar antalet hantverkare som ska ha betalt för tiden). Slutligen lyfts elementet ut ur vektorn då den hantverkaren kan gå hem. Loopen upprepas tills dess att alla hantverkare har gått hem. Då innehåller $cost$ precis kostnaden för renoveringsarbetet.
+Algoriritmen använder sig av en vektor $times$ innehållandes tiderna $t_1,...,t_n$ för de olika hantverkarna. Den väljer sedan det minsta elementet ur vektorn vid varje iteration i while-slingan. Den totala kostnaden ökar med elementets värde $*$ gånger antalet hantverkare som är kvar i vektorn (eftersom det precis motsvarar antalet hantverkare som ska ha betalt för tiden). Slutligen lyfts elementet ut ur vektorn då den hantverkaren kan gå hem. Loopen upprepas tills dess att alla hantverkare har gått hem. Då innehåller $cost$ precis kostnaden för renoveringsarbetet.
 
 \begin{algorithm}
 \begin{algorithmic}[0]
@@ -41,36 +41,44 @@ Algoritmens korrekthet bevisas med följande resonemang:\\
 Med 0 eller 1 st hantverkare är lösningen trivial. Antag nu att $k$ är den minsta kostnaden för att utföra $m \geq 2$ st hantverkararbeten. Lösningen innehåller $m$ st arbeten utförda i ordningen $a_1,...,a_m$. Om $k$ skulle åstadkommits genom att välja hantverkarna i en annan ordning än icke-avtagande borde det finnas två hantverkararbeten $a_i$ och $a_j$ sådana att $t_i > t_j$ och $1 \leq i < j \leq m$. Kostnaden för de två arbetena är $t_i * (m+1-i)$ och $t_j * (m+1-j)$. Genom att byta plats på $a_i$ och $a_j$ förblir kostnaden för alla andra arbeten oförändrade, medan de två arbetena nu får kostnaden $t_i * (m+1-j)$ och $t_j * (m+1-i)$. Men eftersom $t_i > t_j$ och $(m+1-i) > (m+1-j)$ måste vi nu fått en strikt mindre kostnad (Kort bevis för varför det är så finns i avsnitt 3). $k$ måste alltså åstadklommits genom att välja hantverkarna i en icke-avtagande ordning. Då detta är precis vad den beskrivna algoritmen gör är korrekthet i ordningen alltså visad.\\
 När ordningen är korrekt behöver algoritmen endast addera rätt mängd till kostnaden varje loopvarv för att vara korrekt. Rätt kostnad för varje arbete är tiden för arbetet multiplicerat med antalet hantverkare som ska få betalt under tiden, alltså alla som väntar plus den som arbetar. Loop invarianten visar att detta håller.
 
-
+\newpage
 \section{Mängder av anagram!}
+
+Problemet består av att utifrån en ordlista räkna ut alla delmängder sådana att orden är anagram av varandra. Varje delmängd ska sedan skrivas ut i bokstavsordning på en rad för sig. Ordlistan innehåller $m$ st ord och det längsta ordet är $n$ bokstäver långt.\\
+
+Problemet löses enklast genom att successivt dela upp listorna tills dess att alla listor endast innehåller ord som inbördes är anagram. Ett ord och alla dess anagram har gemensamt att varje bokstav förekommer lika många gånger i var och ett av orden. Genom att göra uppdelningen efter frekvensen av en viss bokstav i varje ord kan man med ett konstant antal iterationer (nämligen 29 st, alltså antalet bokstäver i alfabetet) av orden få de olika listorna med anagram. Då återstår det bara att sortera var och en av listorna. Även det kan dra nytta av det konstanta antalet bokstäver i alfabetet och utföra en radixsort i linjär tid.
 
 \begin{algorithm}
 \begin{algorithmic}[0]
 \State //$n$ är längden på längsta ordet i den ursprungliga listan.
-\State //$wordList[w].copy$ innehåller en kopia av ordet där inga platser bytts mot \textbf{no char}.
-\State //Denna kopia följer alltid med ordet.\\
-\State Anagrammängd($wordList$[1..$m$])=
-\For{every letter ö \textbf{to} a \textbf{as} $letter$}
-\State $newList \gets$ empty list
-\For{$position \gets 1$ \textbf{to} $n$}
-\For{every word in $wordList$ in rising order \textbf{as} $w$}
-\If{$list[w][p] = letter$}
-\State $list[w][p] \gets$ \textbf{no char}
-\State \textbf{append} $list[w]$ \textbf{to} $newList$
-\State \textbf{remove} $list[w]$
+\State //Position är en funktion som berättar vilken position bokstaven har i alfabetet.
+\State //T.ex Position(`a`) = 1, Position(`c`) = 3.
+\State //Låt initialt: $letter \gets$ `a`\\
+\State Anagrammängd($wordList$[1..$m$], $letter$)=
+\For{$i \gets 1$ \textbf{to} Position(`ö`)+1}
+\State $newLists[i] \gets$ empty list
+\EndFor
+\For{every $word$ in $wordList$}
+\State $count \gets$ \textbf{occurences of} $letter$
+\State \textbf{append} $word$ \textbf{to} $newLists[count+1]$
+\EndFor
+\If{$letter$ = `ö`}
+\For{every $list$ in $newLists$}
+\State \textbf{sort} list in alphabetical order using \textbf{radixsort}
+\State \textbf{print} $list$
+\State \textbf{print newline}
+\EndFor
+\Else
+\For{every $list$ in $newLists$}
+\State Anagrammängd($list$, \textbf{letter after} $letter$)
+\EndFor
 \EndIf
-\EndFor
-\EndFor
-\State Anagrammängd(newList)
-\EndFor
-\For{every element in $wordList$ \textbf{as} $e$}
-\State \textbf{print} $e.copy$
-\EndFor
-\State \textbf{print} a newline if any elements were printed.
 \end{algorithmic}
 \end{algorithm}
 
+Tidskomplexiteten är $\mathcal{O}(nm)$\\
 
+\newpage
 \section{Tillägg}
 För två par av positiva tal $a$ och $b$, samt $x$ och $y$, gäller att $ax+by > ay+bx$ om $a>b$ samt $x>y$.\\
 \textbf{Bevis:}\\
