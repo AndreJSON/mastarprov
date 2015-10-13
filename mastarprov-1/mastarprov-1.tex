@@ -14,12 +14,12 @@
 \maketitle
 
 \section{Hantverkare}
-Algoriritmen använder sig av en vektor $times$ innehållandes tiderna $t_1,...,t_n$ för de olika hantverkarna. Den väljer sedan det minsta elementet ur vektorn vid varje iteration i while-slingan. Den totala kostnaden ökar med elementets värde $*$ gånger antalet hantverkare som är kvar i vektorn (eftersom det precis motsvarar antalet hantverkare som ska ha betalt för tiden). Slutligen lyfts elementet ut ur vektorn då den hantverkaren kan gå hem. Loopen upprepas tills dess att alla hantverkare har gått hem. Då innehåller $cost$ precis kostnaden för renoveringsarbetet.
+Algoriritmen använder sig av en vektor $times$ innehållandes tiderna $t_1,...,t_n$ för de olika hantverkarna. Den väljer det minsta elementet ur vektorn vid varje iteration i while-slingan. Den totala kostnaden ökar med elementets värde $*$ antalet hantverkare som är kvar i vektorn (eftersom det precis motsvarar antalet hantverkare som ska ha betalt för tiden). Slutligen lyfts elementet ut ur vektorn då den hantverkaren kan gå hem. Loopen upprepas tills dess att alla hantverkare har gått hem. Då innehåller $cost$ precis kostnaden för renoveringsarbetet.
 
 \begin{algorithm}
 \begin{algorithmic}[0]
 \State Hantverkarkostnad($times$[1..$n$]) =
-\State \textbf{Sortera times med mergesort}
+\State \textbf{Sortera times i sjunkande ordning med mergesort}
 \State $cost \gets$ 0
 \While{$times$ is not empty}
 \State \textbf{invariant}
@@ -31,22 +31,26 @@ Algoriritmen använder sig av en vektor $times$ innehållandes tiderna $t_1,...,t_
 \end{algorithmic}
 \end{algorithm}
 
-Loop invarianten är: $cost$ motsvarar den minimala kostnaden för att utföra de borttagna arbetena med n stycken hantverkare från början.\\
+Loop invarianten är: $cost$ motsvarar den minimala kostnaden för att utföra de ur $times$ borttagna arbetena med n stycken hantverkare från början.\\
 
 Tidskomplexiteten är $\mathcal{O}(nlog(n))$\\
 Detta kan vi se genom följande resonemang:\\
-Det finns två delar av algoritmen som tar mer än konstant tid, mergesort och while-slingan. Mergesort kan utföras i $\mathcal{O}(nlog(n))$ tid med en helt vanlig implementation. While-slingan kommer att köra $n$ gånger eftersom varje iteration plockar bort en av de $n$ hantverkarna. Inuti slingan letas först det minsta elementet upp ur vektorn, vilket går i konstant tid då vektorn är sorterad. Därefter utförs enkel aritmetik som även det går i konstant tid. Till sist tas det minsta elementet bort ur vektorn vilket kan utföras i konstant tid med en sorterad vektor. Totalt sett tar alltså algoritmen $\mathcal{O}(nlog(n)) + \mathcal{O}(n)$ tid, vilket blir $\mathcal{O}(nlog(n))$.
+Det finns två delar av algoritmen som tar mer än konstant tid, mergesort och while-slingan. Mergesort kan utföras i $\mathcal{O}(nlog(n))$ tid med en helt vanlig implementation. While-slingan kommer att köra $n$ gånger eftersom varje iteration plockar bort en av de $n$ st hantverkarna. Inuti slingan letas först det minsta elementet upp ur vektorn, vilket går i konstant tid då vektorn är sorterad. Därefter utförs enkel aritmetik som även det går i konstant tid. Till sist tas det minsta elementet bort ur vektorn vilket kan utföras i konstant tid då vektorn är fallande sorterad. Totalt sett tar alltså algoritmen $\mathcal{O}(nlog(n)) + \mathcal{O}(n)$ tid, vilket blir $\mathcal{O}(nlog(n))$.
 
 Algoritmens korrekthet bevisas med följande resonemang:\\
-Med 0 eller 1 st hantverkare är lösningen trivial. Antag nu att $k$ är den minsta kostnaden för att utföra $m \geq 2$ st hantverkararbeten. Lösningen innehåller $m$ st arbeten utförda i ordningen $a_1,...,a_m$. Om $k$ skulle åstadkommits genom att välja hantverkarna i en annan ordning än icke-avtagande borde det finnas två hantverkararbeten $a_i$ och $a_j$ sådana att $t_i > t_j$ och $1 \leq i < j \leq m$. Kostnaden för de två arbetena är $t_i * (m+1-i)$ och $t_j * (m+1-j)$. Genom att byta plats på $a_i$ och $a_j$ förblir kostnaden för alla andra arbeten oförändrade, medan de två arbetena nu får kostnaden $t_i * (m+1-j)$ och $t_j * (m+1-i)$. Men eftersom $t_i > t_j$ och $(m+1-i) > (m+1-j)$ måste vi nu fått en strikt mindre kostnad (Kort bevis för varför det är så finns i avsnitt 3). $k$ måste alltså åstadklommits genom att välja hantverkarna i en icke-avtagande ordning. Då detta är precis vad den beskrivna algoritmen gör är korrekthet i ordningen alltså visad.\\
-När ordningen är korrekt behöver algoritmen endast addera rätt mängd till kostnaden varje loopvarv för att vara korrekt. Rätt kostnad för varje arbete är tiden för arbetet multiplicerat med antalet hantverkare som ska få betalt under tiden, alltså alla som väntar plus den som arbetar. Loop invarianten visar att detta håller.
+Med 0 eller 1 st hantverkare är lösningen trivial. Antag nu att $k$ är den minsta kostnaden för att utföra $m \geq 2$ st hantverkararbeten. Lösningen innehåller $m$ st arbeten utförda i ordningen $a_1,...,a_m$. Om $k$ skulle åstadkommits genom att välja hantverkarna i en annan ordning än icke-avtagande borde det finnas två hantverkararbeten $a_i$ och $a_j$ sådana att $t_i > t_j$ och $1 \leq i < j \leq m$. Kostnaden för de två arbetena är $t_i * (m+1-i)$ och $t_j * (m+1-j)$. Genom att byta plats på $a_i$ och $a_j$ förblir kostnaden för alla andra arbeten oförändrade, medan de två arbetena nu får kostnaden $t_i * (m+1-j)$ och $t_j * (m+1-i)$. Men eftersom $t_i > t_j$ och $(m+1-i) > (m+1-j)$ måste vi nu fått en strikt mindre kostnad (Kort bevis för varför det är så finns i avsnitt 3). $k$ måste alltså åstadkommits genom att välja hantverkarna i en icke-avtagande ordning. Då detta är precis vad den beskrivna algoritmen är korrekthet gällande ordningen den väljer hantverkarna.\\
+När ordningen är korrekt behöver algoritmen endast addera rätt mängd till kostnaden varje varv i slingan för att vara korrekt. Rätt kostnad för varje arbete är tiden för arbetet multiplicerat med antalet hantverkare som ska få betalt under tiden, alltså alla som väntar plus den som arbetar. Loop invarianten visar att detta håller. Algoritmen finner alltså en minimal kostnad för renoveringsarbetet.
 
-\newpage
+
 \section{Mängder av anagram!}
 
 Problemet består av att utifrån en ordlista räkna ut alla delmängder sådana att orden är anagram av varandra. Varje delmängd ska sedan skrivas ut i bokstavsordning på en rad för sig. Ordlistan innehåller $m$ st ord och det längsta ordet är $n$ bokstäver långt.\\
 
-Problemet löses enklast genom att successivt dela upp listorna tills dess att alla listor endast innehåller ord som inbördes är anagram. Ett ord och alla dess anagram har gemensamt att varje bokstav förekommer lika många gånger i var och ett av orden. Genom att göra uppdelningen efter frekvensen av en viss bokstav i varje ord kan man med ett konstant antal iterationer (nämligen 29 st, alltså antalet bokstäver i alfabetet) av orden få de olika listorna med anagram. Då återstår det bara att sortera var och en av listorna. Även det kan dra nytta av det konstanta antalet bokstäver i alfabetet och utföra en radixsort i linjär tid.
+Problemet löses enklast genom att successivt dela upp listorna tills dess att alla listor endast innehåller ord som inbördes är anagram. Ett ord och alla dess anagram har gemensamt att varje bokstav förekommer lika många gånger i var och ett av orden. Genom att göra uppdelningen efter frekvensen av en viss bokstav i varje ord kan man med ett konstant antal iterationer (nämligen 29 st, alltså antalet bokstäver i alfabetet) av orden få de olika listorna med anagram. Då återstår det bara att sortera var och en av listorna. Även det kan dra nytta av det konstanta antalet bokstäver i alfabetet tillsammans med att varje ord hjar högst $n$ bokstäver och utföra en radixsort i linjär tid. Om ett ord har $s < n$ bokstäver låter radixsorten alla teckenplatser efter tecken nummer $s$ vara ett tomt tecken som har egenskapen att komma före a i alfabetet.\\
+
+I algoritmen är newLists en vektor av länkade listor och wordList en länkad lista som initialt motsvarar ordlistan.
+
+\newpage
 
 \begin{algorithm}
 \begin{algorithmic}[0]
@@ -65,7 +69,7 @@ Problemet löses enklast genom att successivt dela upp listorna tills dess att al
 \EndFor
 \If{$letter$ = `ö`}
 \For{every $list$ in $newLists$}
-\State \textbf{sort} list in alphabetical order using \textbf{radixsort}
+\State \textbf{sort list in alphabetical order using radixsort}
 \State \textbf{print} $list$
 \State \textbf{print newline}
 \State \textbf{assert 3}
@@ -81,29 +85,31 @@ Problemet löses enklast genom att successivt dela upp listorna tills dess att al
 
 Asserts:
 \begin{enumerate}
-\item $wordList$ innehåller bara ord med samma antal av varje bokstav som de andra orden för alla bokstäver till med icke med $letter$
+\item $wordList$ innehåller bara ord med samma antal av varje bokstav som de andra orden för alla bokstäver fram till med icke med $letter$
 \item Alla ord i $wordList$ fram t.o.m. $word$ förekommer precis en gång i $newLists$ och då endast i $newLists[x+1]$ där x är antalet förekomster av $letter$.
 \item Alla listor i $newLists$ fram t.o.m. $list$ har sorterats i bokstavsordning och därefter skrivits ut på varsin rad.
 \item Alla icke-tomma listor i $newLists$ fram t.o.m. $list$ har använts i precis ett rekursivt anrop med en bokstavs-parameter som är ett steg närmare ö än $letter$.
 \end{enumerate}
 
+\newpage
+
 Algoritmens korrekthet bevisas med hjälp av asserts och följande resonemang:\\
-\textbf{assert 1} stämmer uppenbart första gången då $letter$ då är `a` det inte finns några bokstäver före `a`.\\
-\textbf{assert 2} stämmer uppenbart efter varje iteration då de två raderna i slingan väldigt tydligt säger samma sak som \textbf{assert 2}. Efter samtliga iterationer i slingan har alltså samtliga ord i $wordList$ placerats i rätt lista i $newLists$. Nu säger alltså \textbf{assert 2}, givet att \textbf{assert 1} stämde från början, att alla listor i $newLists$ endast innehåller ord som är anagram om man bortser från alla bokstäver efter $letter$.\\
+\textbf{assert 1} stämmer uppenbart första gången eftersom $letter$ då är `a` det inte finns några bokstäver före `a`.\\
+\textbf{assert 2} stämmer uppenbart efter varje iteration då de två raderna i slingan väldigt tydligt säger precis vad \textbf{assert 2} kräver. Efter samtliga iterationer i slingan har alltså samtliga ord i $wordList$ placerats i rätt lista i $newLists$. Nu säger alltså \textbf{assert 2}, givet att \textbf{assert 1} stämde från början, att alla listor i $newLists$ endast innehåller ord som är anagram om man bortser från bokstäverna efter $letter$ i alfabetet.\\
 Om $letter \neq$ `ö` vid If-satsen hoppar algoritmen till For-slingan som utför rekursionen. Eftersom ingen variabelmodifierande kod har exekverats sedan \textbf{assert 2} kan det enkelt ses att \textbf{assert 4} stämmer efter varje iteration. Efter alla iterationer i slingan har alltså alla icke-tomma listor använts i rekursiva anrop, så inga ord har förlorats. Vidare har den medskickade bokstaven kommit ett steg närmare ö, vilket innebär att algoritmen med nödvändighet närmat sig terminering. Om \textbf{assert 2} gällde så säger denna tillsammans med \textbf{assert 4} att \textbf{assert 1} med nödvändighet måste gälla inuti varje ny rekursion.\\
-Om istället $letter =$ `ö` vid If-satsen hoppar algoritmen till For-slingan som skriver ut. Slingan utför uppenbart det \textbf{assert 3} påstår. Eftersom nu $letter =$ `ö` har vi från \textbf{assert 2} fått att alla listor i $newLists$ endast innehåller anagram. Vidare har \textbf{assert 4}, som måste gällt vid föregående rekursioner har, sett till att inga ord går förlorade och att alla ord används i rekursioner som hela tiden närmar sig $letter =$ `ö`. Allt detta betyder alltså att alla ord med nödvändighet tar sig till print-raden och att ordet alltid gör så i en lista som innehåller alla ordets anagram.
+Om istället $letter =$ `ö` vid If-satsen hoppar algoritmen till For-slingan som skriver ut. Slingan utför uppenbart det \textbf{assert 3} påstår. Eftersom nu $letter =$ `ö` har vi från \textbf{assert 2} fått att alla listor i $newLists$ endast innehåller anagram. Vidare har \textbf{assert 4}, som måste gällt vid alla föregående rekursioner, sett till att inga ord går förlorade och att alla ord används i rekursioner som hela tiden närmar sig $letter =$ `ö`. Allt detta betyder alltså att alla ord med nödvändighet tar sig till print-raden och att ordet alltid gör så i en lista som innehåller alla ordets anagram. Dessutom sorteras alltid listan innan den skrivs ut.\\
 
 Tidskomplexiteten är $\mathcal{O}(mn)$\\
 Detta kan ses genom att dela upp algoritmen i de olika for-slingorna och studera var och en av dem:
 \begin{enumerate}
 \item Den första for-slingan kör precis 30 varv och gör ett arbete som tar konstant tid. Totalt sett tar denna del alltså konstant tid. Slingan kommer köras varje gång anagrammängd anropas, vilket maximalt kan ske $29*m$ gånger i värsta fall. Värsta fallet inträffar då orden vid varje rekursion delar upp sig så mycket som möjligt och därmed maximerar antalet rekursioner. Totalt sett tar alltså denna del $\mathcal{O}(m)$ tid.
-\item Den andra for-slingan kommer köras totalt $29*m$ varv oavsett hur orden delar upp sig. Detta eftersom varje ord kommer processas precis en gång för varje bokstav i alfabetet. Se korrekthetsbeviset för djupare analys om varför. Varje varv måste frekvensen av en viss bokstav beräknas i ordet, vilket tar tid proportionellt mot $n$. Append kan görasi konstant tid. Totalt sett tar alltså denna del $\mathcal{O}(mn)$ tid.
-\item Den tredje for-slingan kommer köras $m$ varv i värsta fallet. Värsta fallet inträffar om inga ord i ordlistan är anagram med något annat ord. Speciellt gäller att alla ord behandlas precis en gång av slingan, utspritt över maximalt $m$ varv. Radixsorten tar $n$ tid för varje ord, print även den $n$ tid per ord. Totalt tar alltså denna del $\mathcal{O}(mn)$ tid.
+\item Den andra for-slingan kommer köras totalt $29*m$ varv oavsett hur orden delar upp sig. Detta eftersom varje ord kommer processas precis en gång för varje bokstav i alfabetet. Se korrekthetsbeviset för att tydligare förstå varför det blir så. Vid varje varv måste frekvensen av en viss bokstav beräknas i ordet, vilket tar tid proportionellt mot $n$. Append kan göras i konstant tid. Totalt sett tar alltså denna del $\mathcal{O}(mn)$ tid.
+\item Den tredje for-slingan kommer köras $m$ varv i värsta fallet. Värsta fallet inträffar om inga ord i ordlistan är anagram med något annat ord. Speciellt gäller att alla ord alltid behandlas precis en gång av slingan, utspritt över maximalt $m$ varv. Radixsorten tar $29*n$ tid för varje ord som behandlas, print även den $n$ tid per ord. Totalt tar alltså denna del $\mathcal{O}(mn)$ tid.
 \item Den fjärde och sista for-slingan kör högst $m$ varv och tar konstant tid varje gång om man bortser från rekursionen. Eftersom resonemanget redan tar hänsyn till alla gånger som varje slinga kan exekveras över samtliga rekursioner kan vi här alltså bortse från tiden för rekursionerna. Totalt sett tar alltså denna del $\mathcal{O}(m)$ tid.
 \end{enumerate}
 Hela algoritmen tycks alltså ta $\mathcal{O}(m)$ + $\mathcal{O}(mn)$ + $\mathcal{O}(mn)$ + $\mathcal{O}(m)$ tid, vilket blir just $\mathcal{O}(m)$.
 
-Tidskomplexiteten sammanfaller med den undre gränsen. Detta ty den undre gränsen inte kan vara lägre än $\mathcal{O}(mn)$. Om gränsen skulle vara lägre än så skulle det innebära att en sådan algoritm inte skulle titta på alla bokstäver i alla orden. Om algoritmen inte tittar på alla bokstäver kan man byta ut den bokstaven utan att algoritmen ger ett annat svar. Det leder uppenbarligen till ett inkorrekt beteende.\\
+Tidskomplexiteten sammanfaller med den undre gränsen. Detta ty den undre gränsen inte kan vara lägre än $\mathcal{O}(mn)$. Om gränsen skulle vara lägre än så skulle det innebära att en sådan algoritm inte skulle titta på alla bokstäver i alla orden. Om algoritmen inte tittar på alla bokstäver kan man byta ut den bokstaven utan att algoritmen ger ett annat svar. Det leder uppenbarligen till ett inkorrekt beteende. Gränsen kan heller inte ligga högre än $\mathcal{O}(mn)$ eftersom det nyss bevisats att problemet kan lösas med en sådan tidskomplexitet. De måste alltså precis sammanfalla.\\
 
 
 \newpage
