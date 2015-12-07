@@ -36,6 +36,27 @@ $\sum_{j = 1}^{|s|} a_{f(j)} = n$ och $\sum_{j = 1}^{|s|} a_{f(j)}p_{f(j)} \geq 
 
 För att visa att detta beslutsproblem är NP-Fullständigt krävs att vi dels visar NP-tillhörighet och därefter att problemet är NP-svårt. Vi börjar med NP-tillhörigheten som visas genom att varje given ja-instants skall kunna verifieras i polynomisk tid. Detta visas genom följande algoritm:
 
-
+\begin{algorithm}
+\begin{algorithmic}[0]
+\State VerifyFlyktingNP($l$, $s$, $n$, $M$) =
+\For{\textbf{each} pair $p_s$ in $s$}
+\If{\textbf{exists} pair $p_l$ in $l$ identical to $p_s$}
+\State \textbf{delete} first instance of $p_l$ from $l$
+\Else
+\State \textbf{return} false
+\EndIf
+\EndFor
+\State $count \gets 0$
+\State $prio \gets 0$
+\For{\textbf{each} pair $(a,p)$ in $s$}
+\State $count \gets count + a$
+\State $prio \gets prio + p*a$
+\EndFor
+\If{$count=n$ \textbf{and} $prio \leq M$}
+\State \textbf{return} true
+\EndIf
+\State \textbf{return} false
+\end{algorithmic}
+\end{algorithm}
 
 \end{document}
