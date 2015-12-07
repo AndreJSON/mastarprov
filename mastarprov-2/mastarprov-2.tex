@@ -1,0 +1,41 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper]{geometry}
+\usepackage[swedish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+
+\title{Mästarprov 2}
+\author{André Josefsson 19940429-4176}
+
+\begin{document}
+\maketitle
+
+\section{Flyktingplaceringsproblemet}
+Maximeringsproblemet omformuleras till ett beslutsproblem på följande vis:
+\newline
+
+
+\textbf{Indata:}
+\newline
+Antal platser $n$ på boendet.
+\newline
+En lista $l = \{(a_i,p_i)\}$ om $m$ st talpar, där $a_i$ betecknar antalet flyktingar i grupp $i$ och $p_i$ betecknar värdet på deras prioritering av det aktuella boendet. Prioriteringen kan vara något av heltalen 1,2,3,4 eller 5.
+\newline
+Ett mål $M$ som införts för att göra det aktuella problemet till ett beslutsproblem.
+\newline
+
+
+\textbf{Beslutsproblemet:}
+\newline
+Finns det någon lista $s$ av flyktinggruper, med injektionen $f:\textbf{N} \rightarrow \textbf{N}, s_{f(x)} = l_y, \forall x \in \{1,...,|s|\}$, sådan att:
+$\sum_{j = 1}^{|s|} a_{f(j)} = n$ och $\sum_{j = 1}^{|s|} a_{f(j)}p_{f(j)} \geq M$ ?
+\newline
+
+För att visa att detta beslutsproblem är NP-Fullständigt krävs att vi dels visar NP-tillhörighet och därefter att problemet är NP-svårt. Vi börjar med NP-tillhörigheten som visas genom att varje given ja-instants skall kunna verifieras i polynomisk tid. Detta visas genom följande algoritm:
+
+
+
+\end{document}
